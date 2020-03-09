@@ -78,7 +78,21 @@ def get_all_translations(rna_sequence, genetic_code):
         A list of strings; each string is an sequence of amino acids encoded by
         `rna_sequence`.
     """
-    pass
+    rna_sequence = rna_sequence.upper()
+    number_of_bases =len(rna_sequence)
+    last_codon_index = number_of_bases -3
+    if last_codon_index < 0:
+        return []
+    amino_acid_seq_list = []
+    for base_index in range(last_codon_index +1):
+        codon = rna_sequence[base_index: base_index +3]
+        if codon == "AUG":
+            aa_seq = translate_sequence(
+                    rna_sequence = rna_sequence[base_index:],
+                    genetic_code = genetic_code)
+            if aa_seq:
+                amino_acid_seq_list.append(aa_seq)
+    return amino_acid_seq_list
 
 def get_reverse(sequence):
     """Reverse orientation of `sequence`.
@@ -94,7 +108,10 @@ def get_reverse(sequence):
     >>> get_reverse('ATGC')
     'CGTA'
     """
-    pass
+    seq_list = list(sequence.upper())
+    seq_list.reverse()
+    rev_seq = "".join(seq_list)
+    return rev_seq
 
 def get_complement(sequence):
     """Get the complement of a `sequence` of nucleotides.
